@@ -1,0 +1,35 @@
+stages:
+  - build
+  - test
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+
+build_job:
+  stage: build
+  image: node:14
+  script:
+    - echo "Installing dependencies..."
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+test_job:
+  stage: test
+  image: node:14
+  script:
+    - echo "Running tests..."
+    - npm test
+
+deploy_job:
+  stage: deploy
+  image: node:14
+  script:
+    - echo "Deploying application..."
+    - npm install -g pm2
+    - pm2 start app.js
+  only:
+    - main
